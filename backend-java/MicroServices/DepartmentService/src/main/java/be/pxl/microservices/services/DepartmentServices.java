@@ -2,6 +2,7 @@ package be.pxl.microservices.services;
 
 import be.pxl.microservices.api.request.DepartmentRequest;
 import be.pxl.microservices.api.response.DepartmentResponse;
+import be.pxl.microservices.api.response.DepartmentWithEmployeesResponse;
 import be.pxl.microservices.domain.Department;
 import be.pxl.microservices.exception.DepartmentNotFoundException;
 import be.pxl.microservices.repository.DepartmentRepository;
@@ -32,9 +33,8 @@ public class DepartmentServices implements IDepartmentServices{
     }
 
     @Override
-    public List<DepartmentResponse> getDepartmentsByOrganisationIdWithEmployees(Long organizationId) {
-        return departmentRepository.findByOrganizationId(organizationId).stream().filter(
-                d -> (long) d.getEmployees().size() > 0).map(DepartmentResponse::new).toList();
+    public List<DepartmentWithEmployeesResponse> getDepartmentsByOrganisationIdWithEmployees(Long organizationId) {
+        return departmentRepository.findByOrganizationId(organizationId).stream().map(DepartmentWithEmployeesResponse::new).toList();
 
     }
 

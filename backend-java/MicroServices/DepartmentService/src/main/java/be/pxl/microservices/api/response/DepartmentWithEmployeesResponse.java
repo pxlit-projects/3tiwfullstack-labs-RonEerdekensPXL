@@ -2,33 +2,34 @@ package be.pxl.microservices.api.response;
 
 import be.pxl.microservices.domain.Department;
 import be.pxl.microservices.domain.Employee;
-import jakarta.persistence.OneToMany;
 
 import java.util.List;
 
-public class DepartmentResponse {
-
+public class DepartmentWithEmployeesResponse {
     private Long id;
 
     private Long organizationId;
     private String name;
+    private List<Employee> employees;
     private String position;
 
-    public DepartmentResponse(Long id, Long organizationId, String name, String position) {
+    public DepartmentWithEmployeesResponse(Long id, Long organizationId, String name, List<Employee> employees, String position) {
         this.id = id;
         this.organizationId = organizationId;
         this.name = name;
+        this.employees = employees;
         this.position = position;
     }
 
-    public DepartmentResponse(Department department) {
+    public DepartmentWithEmployeesResponse(Department department) {
         this.id = department.getId();
         this.organizationId = department.getOrganizationId();
         this.name = department.getName();
+        this.employees = department.getEmployees();
         this.position = department.getPosition();
     }
 
-    public DepartmentResponse() {}
+    public DepartmentWithEmployeesResponse() {}
 
     public Long getId() {
         return id;
@@ -53,7 +54,14 @@ public class DepartmentResponse {
     public void setName(String name) {
         this.name = name;
     }
-    
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
 
     public String getPosition() {
         return position;

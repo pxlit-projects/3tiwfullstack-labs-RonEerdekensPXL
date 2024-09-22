@@ -33,12 +33,7 @@
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>be.pxl.microservices</groupId>
-            <artifactId>EmployeeService</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
+
         <dependency>
             <groupId>be.pxl.microservices</groupId>
             <artifactId>EmployeeService</artifactId>

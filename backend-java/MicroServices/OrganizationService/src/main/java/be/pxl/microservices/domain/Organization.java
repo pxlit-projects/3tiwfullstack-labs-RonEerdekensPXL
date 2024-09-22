@@ -29,10 +29,4 @@ public class Organization {
     @OneToMany
     private List<Department> departments;
 
-    public Organization(OrganizationRequest organizationRequest) {
-        this.name = organizationRequest.getName();
-        this.address = organizationRequest.getAddress();
-        this.employees = new ArrayList<Employee>();
-        this.departments = new ArrayList<Department>();
-    }
 }

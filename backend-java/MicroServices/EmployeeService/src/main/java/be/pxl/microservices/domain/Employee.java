@@ -25,11 +25,4 @@ public class Employee {
     private String position;
 
 
-    public Employee(EmployeeRequest employeeRequest) {
-        this.organizationId = employeeRequest.getOrganizationId();
-        this.departmentId = employeeRequest.getDepartmentId();
-        this.name = employeeRequest.getName();
-        this.age = employeeRequest.getAge();
-        this.position = employeeRequest.getPosition();
-    }
 }

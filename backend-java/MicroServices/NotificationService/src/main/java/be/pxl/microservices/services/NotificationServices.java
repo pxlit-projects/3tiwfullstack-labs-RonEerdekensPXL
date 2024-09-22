@@ -28,7 +28,12 @@ public class NotificationServices implements INotificationServices {
 
     @Override
     public NotificationResponse createNotification(NotificationRequest notificationRequest) {
-        Notification notification = new Notification(notificationRequest);
+        Notification notification = Notification.builder()
+                .from(notificationRequest.getFrom())
+                .to(notificationRequest.getTo())
+                .subject(notificationRequest.getSubject())
+                .message(notificationRequest.getMessage())
+                .build();
         notification = notificationRepository.save(notification);
         return new NotificationResponse(notification);
     }

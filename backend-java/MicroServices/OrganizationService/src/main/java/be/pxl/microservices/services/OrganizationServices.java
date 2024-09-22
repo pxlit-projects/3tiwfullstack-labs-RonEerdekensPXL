@@ -51,7 +51,10 @@ public class OrganizationServices implements IOrganizationServices {
     @Override
     public OrganizationResponse createOrganization(OrganizationRequest organizationRequest) {
 
-        Organization organization = new Organization(organizationRequest);
+        Organization organization = Organization.builder()
+                .name(organizationRequest.getName())
+                .address(organizationRequest.getAddress())
+                .build();
         organization = organizationRepository.save(organization);
         return new OrganizationResponse(organization);
     }

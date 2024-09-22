@@ -40,7 +40,11 @@ public class DepartmentServices implements IDepartmentServices{
 
     @Override
     public DepartmentResponse createDepartment(DepartmentRequest departmentRequest) {
-        Department department = new Department(departmentRequest);
+        Department department = Department.builder()
+                .name(departmentRequest.getName())
+                .organizationId(departmentRequest.getOrganizationId())
+                .position(departmentRequest.getPosition()).build();
+
         department = departmentRepository.save(department);
         return new DepartmentResponse(department);
     }

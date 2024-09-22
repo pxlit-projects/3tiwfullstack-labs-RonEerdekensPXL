@@ -24,10 +24,4 @@ public class Notification {
 
     private String message;
 
-    public Notification(NotificationRequest notificationRequest) {
-        this.from = notificationRequest.getFrom();
-        this.to = notificationRequest.getTo();
-        this.subject = notificationRequest.getSubject();
-        this.message = notificationRequest.getMessage();
-    }
 }

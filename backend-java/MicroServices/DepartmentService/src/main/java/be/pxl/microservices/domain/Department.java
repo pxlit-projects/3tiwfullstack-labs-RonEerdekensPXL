@@ -28,10 +28,5 @@ public class Department {
     private List<Employee> employees;
     private String position;
 
-    public Department(DepartmentRequest department) {
-        this.organizationId = department.getOrganizationId();
-        this.name = department.getName();
-        this.employees = new ArrayList<Employee>();
-        this.position = department.getPosition();
-    }
+
 }

@@ -27,7 +27,13 @@ public class EmployeeServices implements IEmployeeServices {
     }
 
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
-        Employee employee = new Employee(employeeRequest);
+        Employee employee = Employee.builder()
+                .age(employeeRequest.getAge())
+                .name(employeeRequest.getName())
+                .position(employeeRequest.getPosition())
+                .departmentId(employeeRequest.getDepartmentId())
+                .organizationId(employeeRequest.getOrganizationId())
+                .build();
         employee = employeeRepository.save(employee);
         return new EmployeeResponse(employee);
     }

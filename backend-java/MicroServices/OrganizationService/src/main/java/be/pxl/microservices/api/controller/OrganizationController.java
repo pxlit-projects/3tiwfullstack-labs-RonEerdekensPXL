@@ -1,10 +1,10 @@
 package be.pxl.microservices.api.controller;
 
-import be.pxl.microservices.api.request.OrganizationRequest;
-import be.pxl.microservices.api.response.OrganizationResponse;
-import be.pxl.microservices.api.response.OrganizationWithDepartmentsAndEmployeesResponse;
-import be.pxl.microservices.api.response.OrganizationWithDepartmentsResponse;
-import be.pxl.microservices.api.response.OrganizationWithEmployeesResponse;
+import be.pxl.microservices.api.dto.request.OrganizationRequest;
+import be.pxl.microservices.api.dto.response.OrganizationResponse;
+import be.pxl.microservices.api.dto.response.OrganizationWithDepartmentsAndEmployeesResponse;
+import be.pxl.microservices.api.dto.response.OrganizationWithDepartmentsResponse;
+import be.pxl.microservices.api.dto.response.OrganizationWithEmployeesResponse;
 import be.pxl.microservices.exception.OrganizationNotFoundException;
 import be.pxl.microservices.services.IOrganizationServices;
 import lombok.RequiredArgsConstructor;

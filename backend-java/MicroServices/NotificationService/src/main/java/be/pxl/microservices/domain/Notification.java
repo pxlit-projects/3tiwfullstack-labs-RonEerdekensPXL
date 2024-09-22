@@ -1,9 +1,7 @@
 package be.pxl.microservices.domain;
 
-import be.pxl.microservices.api.request.NotificationRequest;
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.logging.log4j.message.Message;
 
 @Entity
 @Table(name = "notification")

@@ -1,4 +1,4 @@
-package be.pxl.microservices.api.response;
+package be.pxl.microservices.api.dto.response;
 
 import be.pxl.microservices.domain.Notification;
 import lombok.AllArgsConstructor;
@@ -18,15 +18,5 @@ public class NotificationResponse {
     private String to;
     private String subject;
     private String message;
-
-
-    public NotificationResponse(Notification notification) {
-        this.id = notification.getId();
-        this.from = notification.getFrom();
-        this.to = notification.getTo();
-        this.subject = notification.getSubject();
-        this.message = notification.getMessage();
-    }
-
 
 }

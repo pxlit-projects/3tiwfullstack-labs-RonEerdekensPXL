@@ -1,6 +1,7 @@
-package be.pxl.microservices.domain;
+package be.pxl.microservices.api.dto.response;
 
-import jakarta.persistence.*;
+import be.pxl.microservices.domain.Department;
+import be.pxl.microservices.domain.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,21 +9,15 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity
-@Table(name = "department")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Department {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class DepartmentWithEmployeesResponse {
     private Long id;
 
     private Long organizationId;
     private String name;
-    @OneToMany
     private List<Employee> employees;
     private String position;
 

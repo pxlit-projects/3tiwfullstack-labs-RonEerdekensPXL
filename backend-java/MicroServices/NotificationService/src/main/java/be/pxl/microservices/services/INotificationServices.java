@@ -1,7 +1,7 @@
 package be.pxl.microservices.services;
 
-import be.pxl.microservices.api.request.NotificationRequest;
-import be.pxl.microservices.api.response.NotificationResponse;
+import be.pxl.microservices.api.dto.request.NotificationRequest;
+import be.pxl.microservices.api.dto.response.NotificationResponse;
 
 import java.util.List;
 

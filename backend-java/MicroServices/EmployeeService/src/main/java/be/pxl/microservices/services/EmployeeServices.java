@@ -1,12 +1,11 @@
 package be.pxl.microservices.services;
 
-import be.pxl.microservices.api.request.EmployeeRequest;
-import be.pxl.microservices.api.response.EmployeeResponse;
+import be.pxl.microservices.api.dto.request.EmployeeRequest;
+import be.pxl.microservices.api.dto.response.EmployeeResponse;
 import be.pxl.microservices.domain.Employee;
 import be.pxl.microservices.exception.EmployeeNotFoundException;
 import be.pxl.microservices.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,12 +17,22 @@ public class EmployeeServices implements IEmployeeServices {
 
     private final EmployeeRepository employeeRepository;
 
+    private EmployeeResponse mapToEmployeeResponse(Employee employee) {
+        return EmployeeResponse.builder()
+                .id(employee.getId())
+                .organizationId(employee.getOrganizationId())
+                .departmentId(employee.getDepartmentId())
+                .name(employee.getName())
+                .age(employee.getAge())
+                .position(employee.getPosition())
+                .build();
+    }
 
     public List<EmployeeResponse> getAllEmployees() {
-        return employeeRepository.findAll().stream().map(EmployeeResponse::new).toList();
+        return employeeRepository.findAll().stream().map(this::mapToEmployeeResponse).toList();
     }
     public EmployeeResponse getEmployeeById(Long id) {
-        return employeeRepository.findById(id).map(EmployeeResponse::new).orElseThrow(() -> new EmployeeNotFoundException("Employee with " + id + " not found"));
+        return employeeRepository.findById(id).map(this::mapToEmployeeResponse).orElseThrow(() -> new EmployeeNotFoundException("Employee with " + id + " not found"));
     }
 
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
@@ -35,17 +44,17 @@ public class EmployeeServices implements IEmployeeServices {
                 .organizationId(employeeRequest.getOrganizationId())
                 .build();
         employee = employeeRepository.save(employee);
-        return new EmployeeResponse(employee);
+        return mapToEmployeeResponse(employee);
     }
 
     @Override
     public List<EmployeeResponse> getEmployeesByOrganizationId(Long organizationId) {
-        return employeeRepository.findByOrganizationId(organizationId).stream().map(EmployeeResponse::new).toList();
+        return employeeRepository.findByOrganizationId(organizationId).stream().map(this::mapToEmployeeResponse).toList();
     }
 
     @Override
     public List<EmployeeResponse> getEmployeesByDepartmentId(Long departmentId) {
-        return employeeRepository.findByDepartmentId(departmentId).stream().map(EmployeeResponse::new).toList();
+        return employeeRepository.findByDepartmentId(departmentId).stream().map(this::mapToEmployeeResponse).toList();
     }
 
     @Override
@@ -57,7 +66,7 @@ public class EmployeeServices implements IEmployeeServices {
         employee.setDepartmentId(employeeRequest.getDepartmentId());
         employee.setOrganizationId(employeeRequest.getOrganizationId());
         employeeRepository.save(employee);
-        return new EmployeeResponse(employee);
+        return mapToEmployeeResponse(employee);
     }
 
     @Override

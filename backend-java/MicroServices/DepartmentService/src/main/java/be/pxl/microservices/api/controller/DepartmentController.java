@@ -1,10 +1,7 @@
 package be.pxl.microservices.api.controller;
 
-import be.pxl.microservices.api.request.DepartmentRequest;
-import be.pxl.microservices.api.request.EmployeeRequest;
-import be.pxl.microservices.api.response.DepartmentResponse;
-import be.pxl.microservices.api.response.EmployeeResponse;
-import be.pxl.microservices.domain.Department;
+import be.pxl.microservices.api.dto.request.DepartmentRequest;
+import be.pxl.microservices.api.dto.response.DepartmentResponse;
 import be.pxl.microservices.exception.DepartmentNotFoundException;
 import be.pxl.microservices.exception.EmployeeNotFoundException;
 import be.pxl.microservices.services.IDepartmentServices;

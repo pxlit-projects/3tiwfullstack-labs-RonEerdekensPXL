@@ -1,8 +1,7 @@
 package be.pxl.microservices.services;
 
-import be.pxl.microservices.api.request.EmployeeRequest;
-import be.pxl.microservices.api.response.EmployeeResponse;
-import be.pxl.microservices.domain.Employee;
+import be.pxl.microservices.api.dto.request.EmployeeRequest;
+import be.pxl.microservices.api.dto.response.EmployeeResponse;
 
 import java.util.List;
 

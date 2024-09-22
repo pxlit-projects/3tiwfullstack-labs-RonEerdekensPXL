@@ -1,7 +1,7 @@
 package be.pxl.microservices.api.controller;
 
-import be.pxl.microservices.api.request.NotificationRequest;
-import be.pxl.microservices.api.response.NotificationResponse;
+import be.pxl.microservices.api.dto.request.NotificationRequest;
+import be.pxl.microservices.api.dto.response.NotificationResponse;
 import be.pxl.microservices.exception.NotificationNotFoundException;
 import be.pxl.microservices.services.INotificationServices;
 import lombok.RequiredArgsConstructor;

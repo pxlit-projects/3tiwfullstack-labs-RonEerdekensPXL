@@ -8,16 +8,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity
-@Table(name = "department")
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Department {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Long id;
 
     private Long organizationId;

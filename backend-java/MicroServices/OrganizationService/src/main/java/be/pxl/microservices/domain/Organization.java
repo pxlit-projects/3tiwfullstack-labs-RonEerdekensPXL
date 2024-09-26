@@ -22,9 +22,9 @@ public class Organization {
 
     private String name;
     private  String address;
-    @OneToMany
+    @Transient
     private List<Employee> employees;
-    @OneToMany
+    @Transient // vluchtig niet opvullen, tijdelijk
     private List<Department> departments;
 
 }

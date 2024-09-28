@@ -42,7 +42,7 @@ public class EmployeeController {
         return new ResponseEntity(employeeService.createEmployee(employeeRequest), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest employeeRequest) {
         EmployeeResponse employee = employeeService.updateEmployee(id, employeeRequest);
         return ResponseEntity.ok(employee);

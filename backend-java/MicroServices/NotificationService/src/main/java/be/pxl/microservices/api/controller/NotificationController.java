@@ -36,7 +36,7 @@ public class NotificationController {
         return new ResponseEntity<>(notificationServices.createNotification(notificationRequest), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<NotificationResponse> updateNotification(@PathVariable Long id, @RequestBody NotificationRequest notificationRequest) {
 
         NotificationResponse notificationResponse = notificationServices.updateNotification(id, notificationRequest);

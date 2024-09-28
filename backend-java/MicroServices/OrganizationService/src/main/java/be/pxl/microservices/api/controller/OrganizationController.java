@@ -26,76 +26,55 @@ public class OrganizationController {
 
     @GetMapping("/{id}")
     public ResponseEntity<OrganizationResponse> findOrganizationById(@PathVariable Long id) {
-        try {
-            OrganizationResponse organizationResponse = organizationServices.getOrganizationById(id);
-            return new ResponseEntity(organizationResponse, HttpStatus.OK);
-        }catch (OrganizationNotFoundException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        OrganizationResponse organizationResponse = organizationServices.getOrganizationById(id);
+        return new ResponseEntity(organizationResponse, HttpStatus.OK);
+
     }
+
     @GetMapping("/{id}/with-departments")
     public ResponseEntity<OrganizationWithDepartmentsResponse> findOrganizationByIdWithDepartments(@PathVariable Long id) {
-        try {
-            OrganizationWithDepartmentsResponse organizationResponse = organizationServices.getOrganizationByIdWithDepartments(id);
-            return new ResponseEntity(organizationResponse, HttpStatus.OK);
-        }catch (OrganizationNotFoundException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        OrganizationWithDepartmentsResponse organizationResponse = organizationServices.getOrganizationByIdWithDepartments(id);
+        return new ResponseEntity(organizationResponse, HttpStatus.OK);
+
     }
+
     @GetMapping("/{id}/with-departments-and-employees")
     public ResponseEntity<OrganizationWithDepartmentsAndEmployeesResponse> findOrganizationByIdWithDepartmentsAndEmployees(@PathVariable Long id) {
-        try {
-            OrganizationWithDepartmentsAndEmployeesResponse organizationResponse = organizationServices.getOrganizationByIdWithDepartmentsAndEmployees(id);
-            return new ResponseEntity(organizationResponse, HttpStatus.OK);
-        }catch (OrganizationNotFoundException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        OrganizationWithDepartmentsAndEmployeesResponse organizationResponse = organizationServices.getOrganizationByIdWithDepartmentsAndEmployees(id);
+        return new ResponseEntity(organizationResponse, HttpStatus.OK);
+
     }
 
     @GetMapping("/{id}/with-employees")
     public ResponseEntity<OrganizationWithEmployeesResponse> findOrganizationByIdWithEmployees(@PathVariable Long id) {
-        try {
-            OrganizationWithEmployeesResponse organizationResponse = organizationServices.getOrganizationByIdWithEmployees(id);
-            return new ResponseEntity(organizationResponse, HttpStatus.OK);
-        }catch (OrganizationNotFoundException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        OrganizationWithEmployeesResponse organizationResponse = organizationServices.getOrganizationByIdWithEmployees(id);
+        return new ResponseEntity(organizationResponse, HttpStatus.OK);
+
     }
 
     @PostMapping
     public ResponseEntity createOrganization(@RequestBody OrganizationRequest organizationRequest) {
         return new ResponseEntity(organizationServices.createOrganization(organizationRequest), HttpStatus.CREATED);
     }
+
     @PutMapping("/{id}")
     public ResponseEntity updateOrganization(@PathVariable Long id, @RequestBody OrganizationRequest organizationRequest) {
-        try {
-            OrganizationResponse organizationResponse = organizationServices.updateOrganization(id,organizationRequest);
-            return new ResponseEntity(organizationResponse, HttpStatus.OK);
-        }catch (OrganizationNotFoundException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        OrganizationResponse organizationResponse = organizationServices.updateOrganization(id, organizationRequest);
+        return new ResponseEntity(organizationResponse, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteOrganization(@PathVariable Long id) {
-        try {
-            organizationServices.deleteDepartment(id);
-            return new ResponseEntity(HttpStatus.OK);
-        }catch (OrganizationNotFoundException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        organizationServices.deleteDepartment(id);
+        return new ResponseEntity(HttpStatus.OK);
+
     }
 
 }

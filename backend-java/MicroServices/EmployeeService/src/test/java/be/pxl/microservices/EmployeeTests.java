@@ -35,7 +35,7 @@ public class EmployeeTests {
     private EmployeeRepository employeeRepository;
 
     @Container
-    private static MySQLContainer sglContainer = new MySQLContainer(
+    private static final MySQLContainer sglContainer = new MySQLContainer(
             "mysql:5.7.37"
     );
 

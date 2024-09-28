@@ -24,15 +24,8 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable Long id) {
-
-        try {
-            EmployeeResponse employee = employeeService.getEmployeeById(id);
-            return ResponseEntity.ok(employee);
-        }catch (EmployeeNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }catch (Exception e){
-            return ResponseEntity.internalServerError().build();
-        }
+        EmployeeResponse employee = employeeService.getEmployeeById(id);
+        return ResponseEntity.ok(employee);
 
     }
     @GetMapping("/organization/{organizationId}")
@@ -51,25 +44,13 @@ public class EmployeeController {
 
     @PutMapping("/{id}")
     public ResponseEntity updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequest employeeRequest) {
-        try {
-            EmployeeResponse employee = employeeService.updateEmployee(id, employeeRequest);
-            return ResponseEntity.ok(employee);
-        }catch (EmployeeNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }catch (Exception e){
-            return ResponseEntity.internalServerError().build();
-        }
+        EmployeeResponse employee = employeeService.updateEmployee(id, employeeRequest);
+        return ResponseEntity.ok(employee);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteEmployee(@PathVariable Long id) {
-        try {
-            employeeService.deleteEmployee(id);
-            return ResponseEntity.ok().build();
-        }catch (EmployeeNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }catch (Exception e){
-            return ResponseEntity.internalServerError().build();
-        }
+        employeeService.deleteEmployee(id);
+        return ResponseEntity.ok().build();
     }
 }

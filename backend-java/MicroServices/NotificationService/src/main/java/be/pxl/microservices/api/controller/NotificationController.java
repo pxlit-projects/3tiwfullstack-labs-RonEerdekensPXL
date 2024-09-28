@@ -25,14 +25,10 @@ public class NotificationController {
 
     @GetMapping("/{id}")
     public ResponseEntity<NotificationResponse> getNotificationById(@PathVariable Long id) {
-        try {
-            NotificationResponse notificationResponse = notificationServices.getNotificationById(id);
-            return new ResponseEntity<>(notificationResponse, HttpStatus.OK);
-        }catch (NotificationNotFoundException e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        NotificationResponse notificationResponse = notificationServices.getNotificationById(id);
+        return new ResponseEntity<>(notificationResponse, HttpStatus.OK);
+
     }
 
     @PostMapping
@@ -42,25 +38,17 @@ public class NotificationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<NotificationResponse> updateNotification(@PathVariable Long id, @RequestBody NotificationRequest notificationRequest) {
-        try {
-            NotificationResponse notificationResponse = notificationServices.updateNotification(id, notificationRequest);
-            return new ResponseEntity<>(notificationResponse, HttpStatus.OK);
-        }catch (NotificationNotFoundException e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        NotificationResponse notificationResponse = notificationServices.updateNotification(id, notificationRequest);
+        return new ResponseEntity<>(notificationResponse, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteNotification(@PathVariable Long id) {
-        try {
-            notificationServices.deleteNotification(id);
-            return new ResponseEntity(HttpStatus.OK);
-        }catch (NotificationNotFoundException e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        notificationServices.deleteNotification(id);
+        return new ResponseEntity(HttpStatus.OK);
+
     }
 }

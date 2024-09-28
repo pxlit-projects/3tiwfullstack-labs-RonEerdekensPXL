@@ -24,20 +24,17 @@ public class DepartmentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentResponse> getDepartmentById(@PathVariable Long id) {
-        try {
-            DepartmentResponse department = departmentService.getDepartmentById(id);
-            return new ResponseEntity(department, HttpStatus.OK);
-        }catch (DepartmentNotFoundException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        }catch (Exception e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        DepartmentResponse department = departmentService.getDepartmentById(id);
+        return new ResponseEntity(department, HttpStatus.OK);
+
     }
 
     @GetMapping("/organization/{organizationId}")
     public ResponseEntity findDepartmentByOrganizationId(@PathVariable Long organizationId) {
         return new ResponseEntity(departmentService.getDepartmentsByOrganisationId(organizationId), HttpStatus.OK);
     }
+
     @GetMapping("/organization/{organizationId}/with-employees")
     public ResponseEntity findDepartmentByOrganizationIdWithEmployees(@PathVariable Long organizationId) {
         return new ResponseEntity(departmentService.getDepartmentsByOrganisationIdWithEmployees(organizationId), HttpStatus.OK);
@@ -50,26 +47,18 @@ public class DepartmentController {
 
     @PutMapping("/{id}")
     public ResponseEntity updateDepartment(@PathVariable Long id, @RequestBody DepartmentRequest departmentRequest) {
-        try {
-            DepartmentResponse department = departmentService.updateDepartment(id, departmentRequest);
-            return ResponseEntity.ok(department);
-        }catch (EmployeeNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }catch (Exception e){
-            return ResponseEntity.internalServerError().build();
-        }
+
+        DepartmentResponse department = departmentService.updateDepartment(id, departmentRequest);
+        return ResponseEntity.ok(department);
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteDepartment(@PathVariable Long id) {
-        try {
-            departmentService.deleteDepartment(id);
-            return ResponseEntity.ok().build();
-        }catch (DepartmentNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }catch (Exception e){
-            return ResponseEntity.internalServerError().build();
-        }
+
+        departmentService.deleteDepartment(id);
+        return ResponseEntity.ok().build();
+
     }
 
 }

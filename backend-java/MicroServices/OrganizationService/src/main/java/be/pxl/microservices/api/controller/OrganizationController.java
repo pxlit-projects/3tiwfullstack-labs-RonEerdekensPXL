@@ -61,7 +61,7 @@ public class OrganizationController {
         return new ResponseEntity(organizationServices.createOrganization(organizationRequest), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity updateOrganization(@PathVariable Long id, @RequestBody OrganizationRequest organizationRequest) {
 
         OrganizationResponse organizationResponse = organizationServices.updateOrganization(id, organizationRequest);

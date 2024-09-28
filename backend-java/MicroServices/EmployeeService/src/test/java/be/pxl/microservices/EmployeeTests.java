@@ -203,4 +203,24 @@ public class EmployeeTests {
         assertEquals(2L,employeeRepository.findById(emplEntity.getId()).get().getOrganizationId());
         assertEquals(2L,employeeRepository.findById(emplEntity.getId()).get().getDepartmentId());
     }
+
+    @Test
+    public void testDeleteEmployee() throws Exception {
+        Employee employee = Employee.builder()
+                .age(34)
+                .name("Jos")
+                .position("CEO")
+                .organizationId(1L)
+                .departmentId(1L)
+                .build();
+
+        Employee emplEntity = employeeRepository.save(employee);
+
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/employee/" + emplEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        assertEquals(0,employeeRepository.findAll().size());
+    }
 }

@@ -1,5 +1,6 @@
 package be.pxl.microservices;
 
+import be.pxl.microservices.api.dto.request.OrganizationRequest;
 import be.pxl.microservices.api.dto.response.OrganizationResponse;
 import be.pxl.microservices.api.dto.response.OrganizationWithDepartmentsAndEmployeesResponse;
 import be.pxl.microservices.api.dto.response.OrganizationWithDepartmentsResponse;
@@ -189,7 +190,7 @@ public class OrganisationTests {
 
     @Test
     public void testCreateOrganization() throws Exception {
-        Organization organization = Organization.builder()
+        OrganizationRequest organization = OrganizationRequest.builder()
                 .name("PXL")
                 .address("Hasselt")
                 .build();
@@ -213,7 +214,7 @@ public class OrganisationTests {
 
         Organization organizationEntity = organizationRepository.save(organization);
 
-        Organization organizationUpdated = Organization.builder()
+        OrganizationRequest organizationUpdated = OrganizationRequest.builder()
                 .name("PXL2")
                 .address("Hasselt2")
                 .build();

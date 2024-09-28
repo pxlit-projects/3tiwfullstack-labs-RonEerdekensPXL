@@ -1,5 +1,6 @@
 package be.pxl.microservices;
 
+import be.pxl.microservices.api.dto.request.EmployeeRequest;
 import be.pxl.microservices.domain.Employee;
 import be.pxl.microservices.repository.EmployeeRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -152,7 +153,7 @@ public class EmployeeTests {
 
     @Test
     public void testCreateEmployee() throws Exception {
-        Employee employee = Employee.builder()
+        EmployeeRequest employee = EmployeeRequest.builder()
                 .age(34)
                 .name("Jos")
                 .position("CEO")
@@ -182,7 +183,7 @@ public class EmployeeTests {
 
         Employee emplEntity = employeeRepository.save(employee);
 
-        Employee employeeUpdated = Employee.builder()
+        EmployeeRequest employeeUpdated = EmployeeRequest.builder()
                 .age(35)
                 .name("Jan")
                 .position("student")

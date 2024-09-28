@@ -1,5 +1,6 @@
 package be.pxl.microservices;
 
+import be.pxl.microservices.api.dto.request.DepartmentRequest;
 import be.pxl.microservices.api.dto.response.DepartmentResponse;
 import be.pxl.microservices.api.dto.response.DepartmentWithEmployeesResponse;
 import be.pxl.microservices.domain.Department;
@@ -164,7 +165,7 @@ public class DepartmentTests {
 
     @Test
     public void testCreateDepartment() throws Exception {
-        Department department = Department.builder()
+        DepartmentRequest department = DepartmentRequest.builder()
                 .name("school")
                 .organizationId(2L)
                 .position("Test")
@@ -190,7 +191,7 @@ public class DepartmentTests {
 
         Department departmentEntity = departmentRepository.save(department);
 
-        Department departmentUpdated = Department.builder()
+        DepartmentRequest departmentUpdated = DepartmentRequest.builder()
                 .name("school2")
                 .organizationId(3L)
                 .position("Test2")

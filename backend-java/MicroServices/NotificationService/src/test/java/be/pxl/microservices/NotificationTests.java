@@ -1,5 +1,6 @@
 package be.pxl.microservices;
 
+import be.pxl.microservices.api.dto.request.NotificationRequest;
 import be.pxl.microservices.domain.Notification;
 import be.pxl.microservices.repository.NotificationRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -99,7 +100,7 @@ public class NotificationTests {
 
     @Test
     public void testCreateNotification() throws Exception {
-        Notification notification = Notification.builder()
+        NotificationRequest notification = NotificationRequest.builder()
                 .from("Organization")
                 .to("Department")
                 .subject("Update department")
@@ -127,7 +128,7 @@ public class NotificationTests {
 
         Notification notificationEntity = notificationRepository.save(notification);
 
-        Notification notificationUpdated = Notification.builder()
+        NotificationRequest notificationUpdated = NotificationRequest.builder()
                 .from("Organization2")
                 .to("Department2")
                 .subject("Update department2")

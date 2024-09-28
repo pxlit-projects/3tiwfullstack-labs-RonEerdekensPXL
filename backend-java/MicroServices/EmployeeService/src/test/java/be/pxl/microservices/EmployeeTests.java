@@ -109,6 +109,13 @@ public class EmployeeTests {
     }
 
     @Test
+    public void testGetEmployeeByIdShouldNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/employee/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void testGetEmployeeByOrganizationId() throws Exception {
         Employee employee = Employee.builder()
                 .age(24)
@@ -206,6 +213,24 @@ public class EmployeeTests {
     }
 
     @Test
+    public void testUpdateEmployeeShouldNotFound() throws Exception {
+        EmployeeRequest employeeUpdated = EmployeeRequest.builder()
+                .age(35)
+                .name("Jan")
+                .position("student")
+                .organizationId(2L)
+                .departmentId(2L)
+                .build();
+
+        String employeeString = objectMapper.writeValueAsString(employeeUpdated);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/employee/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(employeeString))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void testDeleteEmployee() throws Exception {
         Employee employee = Employee.builder()
                 .age(34)
@@ -223,5 +248,12 @@ public class EmployeeTests {
                 .andExpect(status().isOk());
 
         assertEquals(0,employeeRepository.findAll().size());
+    }
+
+    @Test
+    public void testDeleteEmployeeShouldNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/employee/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

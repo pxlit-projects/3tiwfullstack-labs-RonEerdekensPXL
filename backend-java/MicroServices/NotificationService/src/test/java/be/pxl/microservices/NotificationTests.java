@@ -99,6 +99,13 @@ public class NotificationTests {
     }
 
     @Test
+    public void testGetNotificationByIdShouldNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/notification/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void testCreateNotification() throws Exception {
         NotificationRequest notification = NotificationRequest.builder()
                 .from("Organization")
@@ -154,6 +161,23 @@ public class NotificationTests {
     }
 
     @Test
+    public void testUpdateNotificationShouldNotFound() throws Exception {
+        NotificationRequest notificationUpdated = NotificationRequest.builder()
+                .from("Organization2")
+                .to("Department2")
+                .subject("Update department2")
+                .message("json2")
+                .build();
+
+        String notificationUpdatedString = objectMapper.writeValueAsString(notificationUpdated);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/notification/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(notificationUpdatedString))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void testDeleteNotification() throws Exception {
         Notification notification = Notification.builder()
                 .from("Organization")
@@ -169,5 +193,12 @@ public class NotificationTests {
                 .andExpect(status().isOk());
 
         assertEquals(0,notificationRepository.findAll().size());
+    }
+
+    @Test
+    public void testDeleteNotificationShouldNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/notification/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

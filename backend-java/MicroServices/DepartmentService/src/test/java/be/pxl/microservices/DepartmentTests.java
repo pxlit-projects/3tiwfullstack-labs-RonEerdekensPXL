@@ -119,6 +119,12 @@ public class DepartmentTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(Matchers.greaterThan(0)))
                 .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(departmentResponse)));
     }
+    @Test
+    public void testGetDepartmentByIdShouldNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/department/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     public void testFindDepartmentByOrganizationId() throws Exception {
@@ -181,6 +187,7 @@ public class DepartmentTests {
         assertEquals(1,departmentRepository.findAll().size());
     }
 
+
     @Test
     public void testUpdateDepartment() throws Exception {
         Department department = Department.builder()
@@ -210,6 +217,22 @@ public class DepartmentTests {
     }
 
     @Test
+    public void testUpdateDepartmentShouldNotFound() throws Exception {
+        DepartmentRequest departmentUpdated = DepartmentRequest.builder()
+                .name("school2")
+                .organizationId(3L)
+                .position("Test2")
+                .build();
+
+        String departmentUpdatedString = objectMapper.writeValueAsString(departmentUpdated);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/department/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(departmentUpdatedString))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void testDeleteDepartment() throws Exception {
         Department department = Department.builder()
                 .name("school")
@@ -224,5 +247,12 @@ public class DepartmentTests {
                 .andExpect(status().isOk());
 
         assertEquals(0,departmentRepository.findAll().size());
+    }
+
+    @Test
+    public void testDeleteDepartmentShouldNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/department/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

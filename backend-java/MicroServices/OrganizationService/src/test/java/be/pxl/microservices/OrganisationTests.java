@@ -136,6 +136,12 @@ public class OrganisationTests {
     }
 
     @Test
+    public void testFindOrganizationByIdShouldNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/organization/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+    @Test
     public void testFindOrganizationByIdWithDepartments() throws Exception {
         Organization organization = Organization.builder()
                 .name("PXL")
@@ -151,6 +157,12 @@ public class OrganisationTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(Matchers.greaterThan(0)))
                 .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(organizationResponse)));
 
+    }
+    @Test
+    public void testFindOrganizationByIdWithDepartmentsShouldNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/organization/" + 1 + "/with-departments")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
     @Test
     public void testFindOrganizationByIdWithDepartmentsAndEmployees() throws Exception {
@@ -169,6 +181,12 @@ public class OrganisationTests {
                 .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(organizationResponse)));
 
     }
+    @Test
+    public void testFindOrganizationByIdWithDepartmentsAndEmployeesShouldNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/organization/" + 1 + "/with-departments-and-employees")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
     public void testFindOrganizationByIdWithEmployees() throws Exception {
@@ -186,6 +204,12 @@ public class OrganisationTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(Matchers.greaterThan(0)))
                 .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(organizationResponse)));
 
+    }
+    @Test
+    public void testFindOrganizationByIdWithEmployeesShouldNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/organization/" + 1+ "/with-employees")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -232,6 +256,21 @@ public class OrganisationTests {
     }
 
     @Test
+    public void testUpdateOrganizationShouldNotFound() throws Exception {
+        OrganizationRequest organizationUpdated = OrganizationRequest.builder()
+                .name("PXL2")
+                .address("Hasselt2")
+                .build();
+
+        String organizationString = objectMapper.writeValueAsString(organizationUpdated);
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/organization/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(organizationString))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void testDeleteOrganization() throws Exception {
         Organization organization = Organization.builder()
                 .name("PXL")
@@ -245,5 +284,11 @@ public class OrganisationTests {
                 .andExpect(status().isOk());
 
         assertEquals(0,organizationRepository.findAll().size());
+    }
+    @Test
+    public void  testDeleteOrganizationShouldNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/organization/" + 1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

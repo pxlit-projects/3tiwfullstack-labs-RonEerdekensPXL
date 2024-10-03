@@ -1,7 +1,9 @@
 package be.pxl.microservices.services;
 
 import be.pxl.microservices.api.dto.request.EmployeeRequest;
+import be.pxl.microservices.api.dto.request.NotificationRequest;
 import be.pxl.microservices.api.dto.response.EmployeeResponse;
+import be.pxl.microservices.client.NotificationClient;
 import be.pxl.microservices.domain.Employee;
 import be.pxl.microservices.exception.EmployeeNotFoundException;
 import be.pxl.microservices.repository.EmployeeRepository;
@@ -16,6 +18,7 @@ public class EmployeeServices implements IEmployeeServices {
 
 
     private final EmployeeRepository employeeRepository;
+    private final NotificationClient notificationClient;
 
     private EmployeeResponse mapToEmployeeResponse(Employee employee) {
         return EmployeeResponse.builder()
@@ -44,6 +47,13 @@ public class EmployeeServices implements IEmployeeServices {
                 .organizationId(employeeRequest.getOrganizationId())
                 .build();
         employee = employeeRepository.save(employee);
+
+        NotificationRequest notificationRequest = NotificationRequest.builder()
+                .message("Employee Created")
+                .from("EmployeeService").to("Ron").subject("Employee Created").build();
+
+        notificationClient.sendNotification(notificationRequest);
+
         return mapToEmployeeResponse(employee);
     }
 

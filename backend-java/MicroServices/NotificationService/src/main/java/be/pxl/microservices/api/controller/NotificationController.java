@@ -16,39 +16,5 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationController {
 
-    private final INotificationServices notificationServices;
 
-    @GetMapping
-    public ResponseEntity<List<NotificationResponse>> getAllNotifications() {
-        return new ResponseEntity<>(notificationServices.getAllDepartments(), HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<NotificationResponse> getNotificationById(@PathVariable Long id) {
-
-        NotificationResponse notificationResponse = notificationServices.getNotificationById(id);
-        return new ResponseEntity<>(notificationResponse, HttpStatus.OK);
-
-    }
-
-    @PostMapping
-    public ResponseEntity<NotificationResponse> createNotification(@RequestBody NotificationRequest notificationRequest) {
-        return new ResponseEntity<>(notificationServices.createNotification(notificationRequest), HttpStatus.CREATED);
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<NotificationResponse> updateNotification(@PathVariable Long id, @RequestBody NotificationRequest notificationRequest) {
-
-        NotificationResponse notificationResponse = notificationServices.updateNotification(id, notificationRequest);
-        return new ResponseEntity<>(notificationResponse, HttpStatus.OK);
-
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteNotification(@PathVariable Long id) {
-
-        notificationServices.deleteNotification(id);
-        return new ResponseEntity(HttpStatus.OK);
-
-    }
 }

@@ -19,6 +19,6 @@ public class OrganizationWithDepartmentsResponse {
 
     private String name;
     private  String address;
-    private List<Department> departments;
+    private List<DepartmentResponse> departments;
 
 }

@@ -1,23 +1,25 @@
 package be.pxl.microservices.services;
 
 import be.pxl.microservices.api.dto.request.OrganizationRequest;
-import be.pxl.microservices.api.dto.response.OrganizationResponse;
-import be.pxl.microservices.api.dto.response.OrganizationWithDepartmentsAndEmployeesResponse;
-import be.pxl.microservices.api.dto.response.OrganizationWithDepartmentsResponse;
-import be.pxl.microservices.api.dto.response.OrganizationWithEmployeesResponse;
+import be.pxl.microservices.api.dto.response.*;
+import be.pxl.microservices.client.DepartmentClient;
+import be.pxl.microservices.domain.Department;
 import be.pxl.microservices.domain.Organization;
 import be.pxl.microservices.exception.OrganizationNotFoundException;
 import be.pxl.microservices.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class OrganizationServices implements IOrganizationServices {
 
     private final OrganizationRepository organizationRepository;
+    private final DepartmentClient departmentClient;
 
     private OrganizationResponse mapToOrganizationResponse(Organization organization) {
         return OrganizationResponse.builder()
@@ -41,7 +43,8 @@ public class OrganizationServices implements IOrganizationServices {
                 .id(organization.getId())
                 .name(organization.getName())
                 .address(organization.getAddress())
-                .departments(organization.getDepartments())
+                .departments(Optional.ofNullable(organization.getDepartments())
+                        .orElse(Collections.emptyList()).stream().map(this::maptoDepartmentResponse).toList())
                 .build();
     }
     private OrganizationWithEmployeesResponse mapToOrganizationWithEmployees(Organization organization) {
@@ -50,6 +53,14 @@ public class OrganizationServices implements IOrganizationServices {
                 .name(organization.getName())
                 .address(organization.getAddress())
                 .employees(organization.getEmployees())
+                .build();
+    }
+    private DepartmentResponse maptoDepartmentResponse(Department department) {
+        return DepartmentResponse.builder()
+                .id(department.getId())
+                .organizationId(department.getOrganizationId())
+                .name(department.getName())
+                .position(department.getPosition())
                 .build();
     }
 
@@ -66,8 +77,10 @@ public class OrganizationServices implements IOrganizationServices {
 
     @Override
     public OrganizationWithDepartmentsResponse getOrganizationByIdWithDepartments(Long id) {
+        OrganizationWithDepartmentsResponse organization = organizationRepository.findById(id).map(this::mapToOrganizationWithDepartments).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
+        organization.setDepartments(departmentClient.getDepartmentByOrganizationId(organization.getId()));
 
-        return organizationRepository.findById(id).map(this::mapToOrganizationWithDepartments).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
+        return organization;
     }
 
     @Override

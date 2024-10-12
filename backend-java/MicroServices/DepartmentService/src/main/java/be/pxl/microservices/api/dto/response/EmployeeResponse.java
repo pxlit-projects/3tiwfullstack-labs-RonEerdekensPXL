@@ -1,24 +1,21 @@
 package be.pxl.microservices.api.dto.response;
 
-import be.pxl.microservices.domain.Department;
-import be.pxl.microservices.domain.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DepartmentWithEmployeesResponse {
-    private Long id;
+public class EmployeeResponse {
 
+    private Long id;
     private Long organizationId;
+    private Long departmentId;
     private String name;
-    private List<EmployeeResponse> employees;
+    private int age;
     private String position;
 
 

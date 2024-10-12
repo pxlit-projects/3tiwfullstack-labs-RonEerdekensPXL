@@ -3,19 +3,25 @@ package be.pxl.microservices.services;
 import be.pxl.microservices.api.dto.request.DepartmentRequest;
 import be.pxl.microservices.api.dto.response.DepartmentResponse;
 import be.pxl.microservices.api.dto.response.DepartmentWithEmployeesResponse;
+import be.pxl.microservices.api.dto.response.EmployeeResponse;
+import be.pxl.microservices.client.EmployeeClient;
 import be.pxl.microservices.domain.Department;
+import be.pxl.microservices.domain.Employee;
 import be.pxl.microservices.exception.DepartmentNotFoundException;
 import be.pxl.microservices.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class DepartmentServices implements IDepartmentServices{
 
     private final DepartmentRepository departmentRepository;
+    private final EmployeeClient employeeClient;
 
     private DepartmentResponse mapToDepartmentResponse(Department department) {
         return DepartmentResponse.builder()
@@ -31,12 +37,29 @@ public class DepartmentServices implements IDepartmentServices{
                 .organizationId(department.getOrganizationId())
                 .name(department.getName())
                 .position(department.getPosition())
-                .employees(department.getEmployees())
+                // Null check on getEmployees()
+                .employees(Optional.ofNullable(department.getEmployees())
+                        .orElse(Collections.emptyList()) // Return an empty list if null
+                        .stream()
+                        .map(this::mapToEmployeeResponse)
+                        .toList())
+                .build();
+    }
+    private EmployeeResponse mapToEmployeeResponse(Employee employee) {
+        return EmployeeResponse.builder()
+                .id(employee.getId())
+                .name(employee.getName())
+                .age(employee.getAge())
+                .position(employee.getPosition())
+                .departmentId(employee.getDepartmentId())
+                .organizationId(employee.getOrganizationId())
                 .build();
     }
 
+
     @Override
     public List<DepartmentResponse> getAllDepartments() {
+
         return departmentRepository.findAll().stream().map(this::mapToDepartmentResponse).toList();
     }
 
@@ -52,7 +75,11 @@ public class DepartmentServices implements IDepartmentServices{
 
     @Override
     public List<DepartmentWithEmployeesResponse> getDepartmentsByOrganisationIdWithEmployees(Long organizationId) {
-        return departmentRepository.findByOrganizationId(organizationId).stream().map(this::mapToDepartmentWithEmployeesResponse).toList();
+
+        List<DepartmentWithEmployeesResponse> departments = departmentRepository.findByOrganizationId(organizationId).stream().map(this::mapToDepartmentWithEmployeesResponse).toList();
+        departments.forEach(department -> department.setEmployees(employeeClient.getEmployeeByDepartmentId(department.getId())));
+
+        return departments;
 
     }
 

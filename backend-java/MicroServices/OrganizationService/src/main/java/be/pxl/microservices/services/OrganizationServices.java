@@ -3,7 +3,9 @@ package be.pxl.microservices.services;
 import be.pxl.microservices.api.dto.request.OrganizationRequest;
 import be.pxl.microservices.api.dto.response.*;
 import be.pxl.microservices.client.DepartmentClient;
+import be.pxl.microservices.client.EmployeeClient;
 import be.pxl.microservices.domain.Department;
+import be.pxl.microservices.domain.Employee;
 import be.pxl.microservices.domain.Organization;
 import be.pxl.microservices.exception.OrganizationNotFoundException;
 import be.pxl.microservices.repository.OrganizationRepository;
@@ -20,6 +22,71 @@ public class OrganizationServices implements IOrganizationServices {
 
     private final OrganizationRepository organizationRepository;
     private final DepartmentClient departmentClient;
+    private final EmployeeClient employeeClient;
+
+
+
+    @Override
+    public List<OrganizationResponse> getAllOrganizations() {
+        return organizationRepository.findAll().stream().map(this::mapToOrganizationResponse).toList();
+    }
+
+    @Override
+    public OrganizationResponse getOrganizationById(Long id) {
+
+        return organizationRepository.findById(id).map(this::mapToOrganizationResponse).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
+    }
+
+    @Override
+    public OrganizationWithDepartmentsResponse getOrganizationByIdWithDepartments(Long id) {
+        OrganizationWithDepartmentsResponse organization = organizationRepository.findById(id).map(this::mapToOrganizationWithDepartments).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
+        organization.setDepartments(departmentClient.getDepartmentByOrganizationId(organization.getId()));
+
+        return organization;
+    }
+
+    @Override
+    public OrganizationWithDepartmentsAndEmployeesResponse getOrganizationByIdWithDepartmentsAndEmployees(Long id) {
+        return organizationRepository.findById(id).map(this::mapToOrganizationWithDepartmentsAndEmployees).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
+    }
+
+    @Override
+    public OrganizationWithEmployeesResponse getOrganizationByIdWithEmployees(Long id) {
+
+        OrganizationWithEmployeesResponse organization = organizationRepository.findById(id).map(this::mapToOrganizationWithEmployees).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
+        organization.setEmployees(employeeClient.getEmployeeByOrganizationId(organization.getId()));
+
+        return organization;
+
+    }
+
+    @Override
+    public OrganizationResponse createOrganization(OrganizationRequest organizationRequest) {
+
+        Organization organization = Organization.builder()
+                .name(organizationRequest.getName())
+                .address(organizationRequest.getAddress())
+                .build();
+        organization = organizationRepository.save(organization);
+        return mapToOrganizationResponse(organization);
+    }
+
+    @Override
+    public OrganizationResponse updateOrganization(Long id, OrganizationRequest organizationRequest) {
+
+        Organization organization = organizationRepository.findById(id).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
+        organization.setName(organizationRequest.getName());
+        organization.setAddress(organizationRequest.getAddress());
+        organization = organizationRepository.save(organization);
+        return mapToOrganizationResponse(organization);
+    }
+
+    @Override
+    public void deleteDepartment(Long id) {
+        organizationRepository.findById(id).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
+        organizationRepository.deleteById(id);
+    }
+
 
     private OrganizationResponse mapToOrganizationResponse(Organization organization) {
         return OrganizationResponse.builder()
@@ -52,7 +119,8 @@ public class OrganizationServices implements IOrganizationServices {
                 .id(organization.getId())
                 .name(organization.getName())
                 .address(organization.getAddress())
-                .employees(organization.getEmployees())
+                .employees(Optional.ofNullable(organization.getEmployees())
+                        .orElse(Collections.emptyList()).stream().map(this::maptoEmployeeResponse).toList())
                 .build();
     }
     private DepartmentResponse maptoDepartmentResponse(Department department) {
@@ -63,62 +131,14 @@ public class OrganizationServices implements IOrganizationServices {
                 .position(department.getPosition())
                 .build();
     }
-
-    @Override
-    public List<OrganizationResponse> getAllOrganizations() {
-        return organizationRepository.findAll().stream().map(this::mapToOrganizationResponse).toList();
-    }
-
-    @Override
-    public OrganizationResponse getOrganizationById(Long id) {
-
-        return organizationRepository.findById(id).map(this::mapToOrganizationResponse).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
-    }
-
-    @Override
-    public OrganizationWithDepartmentsResponse getOrganizationByIdWithDepartments(Long id) {
-        OrganizationWithDepartmentsResponse organization = organizationRepository.findById(id).map(this::mapToOrganizationWithDepartments).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
-        organization.setDepartments(departmentClient.getDepartmentByOrganizationId(organization.getId()));
-
-        return organization;
-    }
-
-    @Override
-    public OrganizationWithDepartmentsAndEmployeesResponse getOrganizationByIdWithDepartmentsAndEmployees(Long id) {
-        return organizationRepository.findById(id).map(this::mapToOrganizationWithDepartmentsAndEmployees).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
-    }
-
-    @Override
-    public OrganizationWithEmployeesResponse getOrganizationByIdWithEmployees(Long id) {
-
-        return organizationRepository.findById(id).map(this::mapToOrganizationWithEmployees).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
-
-    }
-
-    @Override
-    public OrganizationResponse createOrganization(OrganizationRequest organizationRequest) {
-
-        Organization organization = Organization.builder()
-                .name(organizationRequest.getName())
-                .address(organizationRequest.getAddress())
+    private EmployeeResponse maptoEmployeeResponse(Employee employee) {
+        return EmployeeResponse.builder()
+                .id(employee.getId())
+                .organizationId(employee.getOrganizationId())
+                .departmentId(employee.getDepartmentId())
+                .name(employee.getName())
+                .age(employee.getAge())
+                .position(employee.getPosition())
                 .build();
-        organization = organizationRepository.save(organization);
-        return mapToOrganizationResponse(organization);
-    }
-
-    @Override
-    public OrganizationResponse updateOrganization(Long id, OrganizationRequest organizationRequest) {
-
-        Organization organization = organizationRepository.findById(id).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
-        organization.setName(organizationRequest.getName());
-        organization.setAddress(organizationRequest.getAddress());
-        organization = organizationRepository.save(organization);
-        return mapToOrganizationResponse(organization);
-    }
-
-    @Override
-    public void deleteDepartment(Long id) {
-        organizationRepository.findById(id).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
-        organizationRepository.deleteById(id);
     }
 }

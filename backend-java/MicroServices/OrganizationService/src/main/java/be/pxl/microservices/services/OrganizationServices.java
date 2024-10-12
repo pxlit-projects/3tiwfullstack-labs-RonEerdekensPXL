@@ -47,7 +47,10 @@ public class OrganizationServices implements IOrganizationServices {
 
     @Override
     public OrganizationWithDepartmentsAndEmployeesResponse getOrganizationByIdWithDepartmentsAndEmployees(Long id) {
-        return organizationRepository.findById(id).map(this::mapToOrganizationWithDepartmentsAndEmployees).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
+        OrganizationWithDepartmentsAndEmployeesResponse organization = organizationRepository.findById(id).map(this::mapToOrganizationWithDepartmentsAndEmployees).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
+        organization.setDepartments(departmentClient.getDepartmentByOrganizationId(organization.getId()));
+        organization.setEmployees(employeeClient.getEmployeeByOrganizationId(organization.getId()));
+        return organization;
     }
 
     @Override
@@ -101,8 +104,10 @@ public class OrganizationServices implements IOrganizationServices {
                 .id(organization.getId())
                 .name(organization.getName())
                 .address(organization.getAddress())
-                .departments(organization.getDepartments())
-                .employees(organization.getEmployees())
+                .departments(Optional.ofNullable(organization.getDepartments())
+                        .orElse(Collections.emptyList()).stream().map(this::maptoDepartmentResponse).toList())
+                .employees(Optional.ofNullable(organization.getEmployees())
+                        .orElse(Collections.emptyList()).stream().map(this::maptoEmployeeResponse).toList())
                 .build();
     }
     private OrganizationWithDepartmentsResponse mapToOrganizationWithDepartments(Organization organization) {

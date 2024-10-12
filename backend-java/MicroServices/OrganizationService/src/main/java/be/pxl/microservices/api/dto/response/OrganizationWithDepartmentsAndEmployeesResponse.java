@@ -19,8 +19,8 @@ public class OrganizationWithDepartmentsAndEmployeesResponse {
 
     private String name;
     private  String address;
-    private List<Department> departments;
-    private List<Employee> employees;
+    private List<DepartmentResponse> departments;
+    private List<EmployeeResponse> employees;
 
 
 }

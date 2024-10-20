@@ -28,6 +28,7 @@
         <module>NotificationService</module>
         <module>DiscoveryService</module>
         <module>ConfigService</module>
+        <module>gatewayService</module>
     </modules>
     <scm>
         <connection/>
@@ -41,10 +42,7 @@
 
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

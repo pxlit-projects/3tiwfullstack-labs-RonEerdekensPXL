@@ -10,6 +10,8 @@ import be.pxl.microservices.domain.Organization;
 import be.pxl.microservices.exception.OrganizationNotFoundException;
 import be.pxl.microservices.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -19,7 +21,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class OrganizationServices implements IOrganizationServices {
-
+    private static final Logger log = LoggerFactory.getLogger(OrganizationServices.class);
     private final OrganizationRepository organizationRepository;
     private final DepartmentClient departmentClient;
     private final EmployeeClient employeeClient;
@@ -71,6 +73,7 @@ public class OrganizationServices implements IOrganizationServices {
                 .address(organizationRequest.getAddress())
                 .build();
         organization = organizationRepository.save(organization);
+        log.info("Organization created with id: {}", organization.getId());
         return mapToOrganizationResponse(organization);
     }
 
@@ -81,6 +84,7 @@ public class OrganizationServices implements IOrganizationServices {
         organization.setName(organizationRequest.getName());
         organization.setAddress(organizationRequest.getAddress());
         organization = organizationRepository.save(organization);
+        log.info("Organization updated with id: {}", organization.getId());
         return mapToOrganizationResponse(organization);
     }
 
@@ -88,6 +92,7 @@ public class OrganizationServices implements IOrganizationServices {
     public void deleteDepartment(Long id) {
         organizationRepository.findById(id).orElseThrow(() -> new OrganizationNotFoundException("Organization with " + id + " not found"));
         organizationRepository.deleteById(id);
+        log.info("Organization deleted with id: {}", id);
     }
 
 

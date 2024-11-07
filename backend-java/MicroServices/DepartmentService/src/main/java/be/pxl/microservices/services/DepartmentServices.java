@@ -1,5 +1,6 @@
 package be.pxl.microservices.services;
 
+import be.pxl.microservices.api.controller.DepartmentController;
 import be.pxl.microservices.api.dto.request.DepartmentRequest;
 import be.pxl.microservices.api.dto.response.DepartmentResponse;
 import be.pxl.microservices.api.dto.response.DepartmentWithEmployeesResponse;
@@ -10,6 +11,8 @@ import be.pxl.microservices.domain.Employee;
 import be.pxl.microservices.exception.DepartmentNotFoundException;
 import be.pxl.microservices.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -19,6 +22,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class DepartmentServices implements IDepartmentServices{
+
+    private static final Logger log = LoggerFactory.getLogger(DepartmentController.class);
 
     private final DepartmentRepository departmentRepository;
     private final EmployeeClient employeeClient;
@@ -91,6 +96,7 @@ public class DepartmentServices implements IDepartmentServices{
                 .position(departmentRequest.getPosition()).build();
 
         department = departmentRepository.save(department);
+        log.info("Department with id: {} created", department.getId());
         return mapToDepartmentResponse(department);
     }
 
@@ -101,6 +107,7 @@ public class DepartmentServices implements IDepartmentServices{
         department.setPosition(departmentRequest.getPosition());
         department.setOrganizationId(departmentRequest.getOrganizationId());
         departmentRepository.save(department);
+        log.info("Department with id: {} updated", id);
         return mapToDepartmentResponse(department);
     }
 
@@ -108,5 +115,6 @@ public class DepartmentServices implements IDepartmentServices{
     public void deleteDepartment(Long id) {
         departmentRepository.findById(id).orElseThrow(() -> new DepartmentNotFoundException("Department with " + id + " not found"));
         departmentRepository.deleteById(id);
+        log.info("Department with id: {} deleted", id);
     }
 }

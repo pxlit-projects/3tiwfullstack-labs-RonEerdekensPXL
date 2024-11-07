@@ -11,10 +11,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class NotificationServices implements INotificationServices {
 
-
+    private static final Logger log = LoggerFactory.getLogger(NotificationServices.class);
 
 
     @Override
